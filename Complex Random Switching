@@ -1,0 +1,41 @@
+//ROUTING
+SndBuf piano => ADSR mit => ADSR control => Pan2 p => dac;
+SndBuf piano2 => ADSR mit2 => ADSR control2 => Pan2 p2 => dac;
+me.dir() => string path;
+"C_Improv 1.wav" => string filename;
+path + filename => filename;
+filename => piano.read;
+me.dir() => string path2;
+"C_Improv 2.wav" => string filename2;
+path2 + filename2 => filename2;
+filename2 => piano2.read;
+
+//SET LEVELS
+0.7 => piano.gain;
+0.7 => piano2.gain;
+
+//set ADSRs
+mit.set(10::ms, 10::ms, 1, 10::ms);
+mit2.set(10::ms, 10::ms, 1, 10::ms);
+control.set(20::second, 0::ms, 1, 0::ms);
+control2.set(20::second, 0::ms, 1, 0::ms);
+//set pans
+0.8 => p.pan;
+-0.8 => p2.pan;
+
+//start attack
+1 => control.keyOn;
+1 => control2.keyOn;
+
+while(true)
+{
+    1 => mit.keyOn;
+    1 => mit2.keyOn;
+    //both set to start randomly anywhere within respective files - INT Y = (FILE LENGTH IN SECONDS)*(44,100)
+    Math.random2(0,7761600) => piano.pos;
+    Math.random2(0,4498200) => piano2.pos;
+    Math.random2f(0.75,3.5)::second => now;
+    1 => mit.keyOff;
+    1 => mit2.keyOff;
+    10::ms => now;
+}
