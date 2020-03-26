@@ -1,0 +1,17 @@
+//ROUTING
+Noise white => ADSR ctf => Pan2 switch => ResonZ filt => NRev rev => dac;
+ctf.set(Math.random2f(0,0.01)::second, Math.random2f(0.1,0.42)::second, Math.random2f(0,0.3), Math.random2f(0.2,0.7)::second);
+0.25 => rev.mix;
+
+//SET MASTER GAIN
+0.3 => white.gain;
+
+while(true)
+{
+    Math.random2(500,1700) => filt.freq;
+    Math.random2f(-1,1) => switch.pan;
+    1 => ctf.keyOn;
+    Math.random2f(1.3,2)::second => now;
+    1 => ctf.keyOff;
+    Math.random2f(3,6)::second => now;
+}
