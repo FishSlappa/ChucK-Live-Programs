@@ -1,0 +1,57 @@
+//HOW LONG DO YOU WANT THE FADE IN TO LAST?
+5 => int in_secs;
+//HOW LONG DO YOU WANT THE PULSES TO GO FOR? (INCLUDES FADE-IN)
+30 => int secs;
+//HOW LONG DO YOU WANT THE FADE OUT TO LAST?
+15 => int out_secs;
+
+
+
+
+//two pulses, one at 1kHz and the other at 2kHz
+SinOsc pulse1 => ADSR noclip => ADSR control => Gain master => dac;
+SinOsc pulse2 => ADSR noclip2 => control => master => dac;
+1000 => pulse1.freq;
+2000 => pulse2.freq;
+
+//set the master to a comfortable level
+0.1 => master.gain;
+//ADSRs
+noclip.set(10::ms, 0::ms, 1, 10::ms);
+noclip2.set(10::ms, 0::ms, 1, 10::ms);
+control.set(in_secs::second, 0::second, 0.8, 15::second);
+
+//converting seconds to number of pulses
+secs*20 => int loop_length;
+out_secs*20 => int fade_length;
+
+1 => control.keyOn;
+
+//loop is not infinite, only a set amount of time
+for(0 => int counter; counter < loop_length; counter++)
+{
+    1 => noclip.keyOn;
+    1 => noclip2.keyOn;
+    //generate random bools for each pulse
+    Math.random2(0,1) => pulse1.gain;
+    Math.random2(0,1) => pulse2.gain;
+    50::ms => now;
+    1=> noclip.keyOff;
+    1=> noclip2.keyOff;
+    <<< counter >>>;
+}
+
+1 => control.keyOff;
+//fade out over 15 seconds - this loop is duplicate of above
+for(0 => int counter2; counter2 < fade_length; counter2++)
+{
+    1 => noclip.keyOn;
+    1 => noclip2.keyOn;
+    //generate random bools for each pulse
+    Math.random2(0,1) => pulse1.gain;
+    Math.random2(0,1) => pulse2.gain;
+    50::ms => now;
+    1=> noclip.keyOff;
+    1=> noclip2.keyOff;
+    <<< counter2 >>>;
+}
