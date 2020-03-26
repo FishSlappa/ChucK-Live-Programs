@@ -1,0 +1,24 @@
+//ROUTING
+SndBuf piano => ADSR mit => dac;
+me.dir() => string path;
+"C_Improv 1.wav" => string filename;
+path + filename => filename;
+filename => piano.read;
+
+//SET MASTER LEVEL
+0.7 => piano.gain;
+
+//set ADSR
+mit.set(10::ms, 10::ms, 1, 10::ms);
+
+//infinite loop
+while(true)
+{
+    1 => mit.keyOn;
+    //randomly start from anywhere within file - INT Y = (FILE LENGTH IN SECONDS)*(44,100)
+    Math.random2(0,7761600) => piano.pos; //set int y in accordance with file length
+    //clip length of 1 second
+    1::second => now;
+    1 => mit.keyOff;
+    10::ms => now;
+}
