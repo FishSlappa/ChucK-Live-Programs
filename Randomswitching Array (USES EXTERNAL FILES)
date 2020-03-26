@@ -1,0 +1,23 @@
+//ROUTING
+SndBuf skit => Gain master => dac;
+//ARRAY
+string skit_samples[8];
+me.dir()+"skitter template 1.wav" => skit_samples[0];
+me.dir()+"skitter template 2.wav" => skit_samples[1];
+me.dir()+"skitter template 3.wav" => skit_samples[2];
+me.dir()+"skitter template 4.wav" => skit_samples[3];
+me.dir()+"skitter template 5.wav" => skit_samples[4];
+me.dir()+"skitter template 6.wav" => skit_samples[5];
+me.dir()+"skitter template 7.wav" => skit_samples[6];
+me.dir()+"skitter template 8.wav" => skit_samples[7];
+
+//SET MASTER GAIN
+0.3 => master.gain;
+
+while(true)
+{
+    Math.random2(0,7) => int which;
+    skit_samples[which] => skit.read;
+    Math.random2f(-3,9) => skit.rate;
+    Math.random2f(0.01,1.2)::second => now;
+}
