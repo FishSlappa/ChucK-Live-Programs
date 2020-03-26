@@ -1,0 +1,25 @@
+//ROUTING
+SinOsc tap => ADSR quick => ResonZ fil => Pan2 p => Gain master => dac;
+
+//SET MASTER LEVEL
+0.3 => master.gain;
+//SET BPM
+120 => float BPM;
+//SET INHERENT PITCH
+3500 => int inh_pitch;
+
+//INTERNAL MECHANICS
+60/BPM => float standard_length;
+inh_pitch => tap.freq;
+inh_pitch*2 => fil.freq;
+
+quick.set(4::ms, 50::ms, 0, 0::second);
+
+//infinite loop
+while(true)
+{
+    1 => quick.keyOn;
+    standard_length::second => now;
+    //pans randomly across stereo field
+    Math.random2(-1,1) => p.pan;
+}
