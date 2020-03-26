@@ -1,0 +1,53 @@
+//create two drones from sound files
+SndBuf drone => ADSR mitigate => NRev rev => Gain master => dac;
+SndBuf drone2 => ADSR mitigate2 => rev => master => dac;
+
+//SET MASTER GAIN
+0.1 => master.gain;
+
+//internal mechanics
+0.5 => drone.rate;
+0.5 => drone2.rate;
+0.2 => rev.mix;
+
+mitigate.set(0.5::second, 0.5::second, 0.4, 0.2::second);
+mitigate2.set(5::second, 5::second, 0.8, 10::second);
+Math.random2(1,16) => int loop_number;
+Math.random2(1,10) => int intro_length;
+
+//ROUTING
+me.dir() => string path;
+"E_Drone2.wav" => string filename;
+path + filename => filename;
+filename => drone.read;
+me.dir() => string path2;
+"E_Drone.wav" => string filename2;
+path2 + filename2 => filename2;
+filename2 => drone2.read;
+
+
+//infinite loop
+while(true)
+{
+    //initialise two drones - a constant one with long attack and another which is looped by for loop
+    0 => drone.pos;
+    1 => mitigate.keyOn;
+    0 => drone2.pos;
+    1 => mitigate2.keyOn;
+    intro_length::second => now;
+    //loop drone 1 from randomised starting point, randomised number of times
+    for(0 => int counter; counter < loop_number; counter++)
+    {
+        Math.random2(1000,42000) => drone.pos;
+        1 => mitigate.keyOn;
+        0.25::second => now;
+        1 => mitigate.keyOff;
+        0.25::second => now;
+    }
+    0 => drone.pos;
+    1 => mitigate.keyOn;
+    0.5 => drone.rate;
+    0.25::second => now;
+    1 => mitigate.keyOff;
+    intro_length::second => now;
+}
