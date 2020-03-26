@@ -4,15 +4,16 @@
 30 => int secs;
 //HOW LONG DO YOU WANT THE FADE OUT TO LAST?
 15 => int out_secs;
-
+//WHAT DO YOU WANT THE INHERENT PITCH TO BE (in kHz)?
+1 => float pitch;
 
 
 
 //two pulses, one at 1kHz and the other at 2kHz
 SinOsc pulse1 => ADSR noclip => ADSR control => Gain master => dac;
 SinOsc pulse2 => ADSR noclip2 => control => master => dac;
-1000 => pulse1.freq;
-2000 => pulse2.freq;
+pitch*1000 => pulse1.freq;
+pitch*2000 => pulse2.freq;
 
 //set the master to a comfortable level
 0.1 => master.gain;
