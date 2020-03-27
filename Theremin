@@ -1,0 +1,126 @@
+//ROUTING
+SinOsc vib => SinOsc theremin => ADSR gentle => NRev reverb => dac;
+
+//INTERNAL MECHANICS
+2 => theremin.sync;
+0.4 => reverb.mix;
+gentle.set(5::second, 0::second, 1, 5::second);
+6 => vib.freq;
+4 => vib.gain;
+0.1 => theremin.gain;
+
+//NOTE
+"E" => string note;
+//OCTAVE
+5 => int octave;
+//CORE NOTE LENGTH (IN SECONDS)
+10 => int length;
+
+if(note == "C")
+{
+    (octave*12) => int id;
+    Std.mtof(id) => theremin.freq;
+    1 => gentle.keyOn;
+    length::second => now;
+    1 => gentle.keyOff;
+    5::second => now;
+}
+if(note == "C#")
+{
+    1 + (octave*12) => int id;
+    Std.mtof(id) => theremin.freq;
+    1 => gentle.keyOn;
+    length::second => now;
+    1 => gentle.keyOff;
+    5::second => now;
+}
+if(note == "D")
+{
+    2 + (octave*12) => int id;
+    Std.mtof(id) => theremin.freq;
+    1 => gentle.keyOn;
+    length::second => now;
+    1 => gentle.keyOff;
+    5::second => now;
+}
+if(note == "D#")
+{
+    3 + (octave*12) => int id;
+    Std.mtof(id) => theremin.freq;
+    1 => gentle.keyOn;
+    length::second => now;
+    1 => gentle.keyOff;
+    5::second => now;
+}
+if(note == "E")
+{
+    4 + (octave*12) => int id;
+    Std.mtof(id) => theremin.freq;
+    1 => gentle.keyOn;
+    length::second => now;
+    1 => gentle.keyOff;
+    5::second => now;
+}
+if(note == "F")
+{
+    5 + (octave*12) => int id;
+    Std.mtof(id) => theremin.freq;
+    1 => gentle.keyOn;
+    length::second => now;
+    1 => gentle.keyOff;
+    5::second => now;
+}
+if(note == "F#")
+{
+    6 + (octave*12) => int id;
+    Std.mtof(id) => theremin.freq;
+    1 => gentle.keyOn;
+    length::second => now;
+    1 => gentle.keyOff;
+    5::second => now;
+}
+if(note == "G")
+{
+    7 + (octave*12) => int id;
+    Std.mtof(id) => theremin.freq;
+    1 => gentle.keyOn;
+    length::second => now;
+    1 => gentle.keyOff;
+    5::second => now;
+}
+if(note == "G#")
+{
+    8 + (octave*12) => int id;
+    Std.mtof(id) => theremin.freq;
+    1 => gentle.keyOn;
+    length::second => now;
+    1 => gentle.keyOff;
+    5::second => now;
+}
+if(note == "A")
+{
+    9 + (octave*12) => int id;
+    Std.mtof(id) => theremin.freq;
+    1 => gentle.keyOn;
+    length::second => now;
+    1 => gentle.keyOff;
+    5::second => now;
+}
+if(note == "A#")
+{
+    10 + (octave*12) => int id;
+    Std.mtof(id) => theremin.freq;
+    1 => gentle.keyOn;
+    length::second => now;
+    1 => gentle.keyOff;
+    5::second => now;
+}
+if(note == "B")
+{
+    11 + (octave*12) => int id;
+    Std.mtof(id) => theremin.freq;
+    1 => gentle.keyOn;
+    length::second => now;
+    1 => gentle.keyOff;
+    5::second => now;
+}
