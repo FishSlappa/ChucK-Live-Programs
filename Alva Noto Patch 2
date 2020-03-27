@@ -1,0 +1,66 @@
+//ROUTING
+SinOsc octaver => ADSR mitigate2 => Gain sine => dac;
+SinOsc kick => ADSR mitigate3 => sine => dac;
+Noise merzbow => ResonZ fil => ADSR mitigate => Gain noise => dac;
+Noise merzbow2 => ResonZ fil2 => ADSR quick => noise => dac;
+
+//INTERNAL MECHANICS
+20 => fil.Q;
+15000 => fil2.freq;
+mitigate.set(10::ms, 0::ms, 1, 10::ms);
+mitigate2.set(10::ms, 0::ms, 1, 10::ms);
+mitigate3.set(4::ms, 0::ms, 1, 10::ms);
+quick.set(5::ms, 5::ms, 0, 0::ms);
+
+//MIXER
+0.05 => float master;
+0.7*master => sine.gain;
+0.3*master => noise.gain;
+
+//MIDI NOTE (E)
+64 => int note;
+
+while(true)
+{
+    Math.random2(0,99) => int johncage;
+    if(johncage%8==0)
+    {
+        1 => mitigate.keyOn;
+        for(10000 => int peak; peak > 9000; peak--)
+        {
+            peak => fil.freq;
+            0.01::ms => now;
+        }
+        1 => mitigate.keyOff;
+    }
+    if(johncage%7)
+    {
+        note + (Math.random2(-4,2)*(12)) => int numbergen;
+        1.1 - (numbergen*0.01) => octaver.gain;
+        Std.mtof(numbergen) => octaver.freq;
+        1 => mitigate2.keyOn;
+        Math.random2f(0.1,1)::second => now;
+        1 => mitigate2.keyOff;
+    }
+    if(johncage%13)
+    {
+        for(0 => int count; count < 32; count++)
+        {
+            1 => quick.keyOn;
+            15::ms => now;
+        }
+    }
+    if(johncage%6)
+    {
+        for(50 => int drop; drop > 30; drop--)
+        {
+            1 => mitigate3.keyOn;
+            drop => kick.freq;
+            30::ms => now;
+
+        }
+        1 => mitigate3.keyOff;
+        20::ms => now;
+    }
+    Math.random2f(0.5,2)::second => now;
+}
