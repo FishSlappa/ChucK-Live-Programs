@@ -1,0 +1,40 @@
+//ROUTING
+SinOsc stab => ADSR clip => Gain input => dac;
+0.1 => input.gain;
+input => Delay d1 => dac;
+input => Delay d2 => dac;
+input => Delay d3 => dac;
+
+//SET BPM
+120 => int BPM;
+//SET FEEDBACK RATIO (10 = no loss of amplitude)
+3 => int feedback;
+//SET TRIPLETS ON/OFF (1 = triplets, 0 = standard)
+1 => int triplet;
+
+//INTERNAL MECHANICS
+feedback*0.1 => d1.gain => d2.gain => d3.gain;
+BPM/60 => int standard_length;
+standard_length*0.66 => float triplet_length;
+Math.random2(10000,20000) => stab.freq;
+clip.set(0::ms, 10::ms, 0, 0::ms);
+1 => clip.keyOn;
+1::second => now;
+
+if(triplet == 1)
+{
+    triplet_length*0.125::second => d1.max => d1.delay;
+    triplet_length*0.25::second => d2.max => d2.delay;
+    triplet_length*0.5::second => d3.max => d3.delay;
+}
+
+else
+    
+standard_length*0.125::second => d1.max => d1.delay;
+standard_length*0.25::second => d2.max => d2.delay;
+standard_length*0.5::second => d3.max => d3.delay;
+
+while(true)
+{
+    5::second => now;
+}
