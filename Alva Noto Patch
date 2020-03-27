@@ -1,0 +1,85 @@
+//ROUTING
+SinOsc noto1 => Gain high => ADSR stab => Pan2 where => dac;
+SinOsc noto2 => high => ADSR mit => where => dac;
+SinOsc noto3 => Gain bass => ADSR bigmit => where => dac;
+Noise merzbow => Gain noise => ResonZ filt => ADSR quickstab => where => dac;
+Noise merzbow2 => noise => filt => ADSR sustain => where => dac;
+
+//MIXER
+0.1 => float master;
+0.2*master => noise.gain;
+0.2*master => high.gain;
+0.5*master => bass.gain;
+
+//INTERNAL MECHANICS
+stab.set(0::ms, 50::ms, 0, 0::ms);
+quickstab.set(0::ms, 10::ms, 0, 0::ms);
+mit.set(5::ms, 0::ms, 1, 5::ms);
+bigmit.set(10::ms, 0::ms, 1, 10::ms);
+sustain.set(10::ms, 0::ms, 0.2, 10::ms);
+17000 => filt.freq;
+50 => filt.Q;
+
+while(true)
+{
+    Math.random2f(-1,1) => where.pan;
+    Math.random2(0,100) => int johncage;
+    Math.random2(0,1) => int boolean;
+    if(johncage%6==0)
+    {
+        1 => sustain.keyOn;
+        12000 => filt.freq;
+        200::ms => now;
+        1 => sustain.keyOff;
+        <<< "cursed" >>>;
+    }
+
+    if(johncage%7==0)
+    {
+        Math.random2(10,70) => int speed;
+        for(0 => int minicount; minicount < Math.random2(1,16); minicount++)
+        {
+            1 => quickstab.keyOn;
+            speed::ms => now;
+        }
+    }
+
+    if(johncage%5==0)
+    {
+        Math.random2(0,1) => int boolean;
+        if(boolean == 1)
+        {
+            41.2 => noto3.freq;
+        }
+        else
+        {
+            82.4 => noto3.freq;
+        }
+        1 => bigmit.keyOn;
+        Math.random2f(0.5,0.75)::second => now;
+        1 => bigmit.keyOff;
+        10::ms => now;
+    }
+
+    if(johncage%8==0)
+    {
+        Math.random2(800,5000) => noto2.freq;
+        0.2 => noto2.gain;
+        1 => mit.keyOn;
+        0.7::second => now;
+        1 => mit.keyOff;
+    }
+
+    if(johncage%4==0)
+    {
+        10000 => noto1.freq;
+        0.02 => noto1.gain;
+        1 => stab.keyOn;
+        1::second => now;
+        <<< "cursed" >>>;
+    }
+    if(boolean == 1)
+    {
+        Math.random2f(0,3)::second => now;
+    }
+}
