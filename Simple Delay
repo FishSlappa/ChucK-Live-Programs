@@ -15,7 +15,7 @@ input => Delay d3 => dac;
 //INTERNAL MECHANICS
 feedback*0.1 => d1.gain => d2.gain => d3.gain;
 BPM/60 => int standard_length;
-standard_length*0.66 => int triplet_length;
+standard_length*0.66 => float triplet_length;
 
 if(triplet == 1)
 {
