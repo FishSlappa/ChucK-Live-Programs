@@ -31,7 +31,6 @@ while(true)
         12000 => filt.freq;
         200::ms => now;
         1 => sustain.keyOff;
-        <<< "cursed" >>>;
     }
 
     if(johncage%7==0)
