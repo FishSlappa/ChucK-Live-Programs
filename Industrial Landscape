@@ -1,0 +1,33 @@
+//ROUTING
+Noise merzbow => ADSR quick => ResonZ fil => dac;
+Noise merzbow2 => ResonZ fil2 => dac;
+Noise merzbow3 => ADSR bloop => ResonZ fil3 => Pan2 where => dac;
+quick.set(5::ms, 50::ms, 0, 0::ms);
+bloop.set(5::ms, 2000::ms, 0, 0::ms);
+20 => fil.Q;
+30 => fil2.Q;
+25 => fil3.Q;
+50 => fil3.freq;
+
+//MIXER
+0.5 => float master;
+0.1*master => merzbow.gain;
+0.7*master => merzbow3.gain;
+
+while(true)
+{
+    Math.random2(0,20) => int i_ching;
+    40 => fil2.freq;
+    1 => quick.keyOn;
+    for(17000 => int ctf; ctf > 16000; ctf--)
+    {
+        ctf => fil.freq;
+        0.2::ms => now;
+    }
+    1 => quick.keyOff;
+    if(i_ching==1)
+    {
+        1 => bloop.keyOn;
+        Math.random2f(0.8,-0.8) => where.pan;
+    }
+}
