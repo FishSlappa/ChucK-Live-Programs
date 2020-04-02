@@ -1,0 +1,16 @@
+//ROUTING
+SubNoise n => HPF hf => dac;
+20000 => hf.freq;
+20 => hf.Q;
+
+//loop 
+while(true)
+{
+    //gain rolls down from 0.8
+    for(80 => int var; var > 0; var--)
+    {
+        (var*0.01) => hf.gain;
+        40::ms => now;
+        <<< var >>>;
+    }
+}
